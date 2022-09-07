@@ -1,12 +1,26 @@
 import { Box, Button, Flex, Spinner, VStack } from '@chakra-ui/react';
+import { useState } from 'react';
 import { useGetEncountersForActiveAttempt } from './api/encounters';
 import { Encounter } from './api/models/Encounter';
 import { CreateEncounterModal } from './components/CreateEncounterModal';
 import { EncounterCard } from './components/EncounterCard';
+import { useInput } from './hooks/useInput';
 import { Converter } from './util/Converter';
 
 export const App = () => {
-	const { data, isLoading } = useGetEncountersForActiveAttempt();
+	const { data, isLoading } = useGetEncountersForActiveAttempt({
+		onSuccess: data => {
+			console.log('Data: ', data);
+		},
+	});
+	const {
+		value: query,
+		setValue: setQuery,
+		resetValue: resetQuery,
+	} = useInput<string>('');
+	const [displayedEncounters, setDisplayedEncounters] = useState<
+		Array<Encounter>
+	>([]);
 
 	const handleCopyAllSets = async (
 		e: React.MouseEvent<HTMLButtonElement>
@@ -14,7 +28,7 @@ export const App = () => {
 		e.preventDefault();
 
 		const sets = Converter.convertManyEncountersToSmogonSet(
-			data.data.encounters ?? []
+			data?.data.encounters ?? []
 		);
 
 		try {
@@ -50,13 +64,12 @@ export const App = () => {
 						gap={2}
 						p={5}
 					>
-						{data &&
-							data.data.encounters.map((encounter: Encounter) => (
-								<EncounterCard
-									key={encounter.id}
-									encounter={encounter}
-								/>
-							))}
+						{displayedEncounters.map((encounter: Encounter) => (
+							<EncounterCard
+								key={encounter.id}
+								encounter={encounter}
+							/>
+						))}
 					</Flex>
 				</Box>
 			)}
