@@ -14,3 +14,13 @@ export interface CreateStats {
 	spd: number;
 	spe: number;
 }
+
+export interface UpdateEncounterBody extends CreateEncounterBody {
+	id: string;
+	evs?: CreateStats;
+}
+
+export interface KillEncounterBody {
+	name: string;
+	description: string;
+}

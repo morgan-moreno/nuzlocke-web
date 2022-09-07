@@ -1,9 +1,10 @@
-import { Axios } from "axios";
+import { Axios } from 'axios';
 
 export const api = new Axios({
-  baseURL: "http://localhost:3000",
-  headers: {
-    "Content-Type": "application/json",
-    "x-nuzlocke-source": "WEB_CLIENT",
-  },
+	baseURL: 'http://localhost:3001',
+	headers: {
+		'x-nuzlocke-source': 'WEB_CLIENT',
+		'Content-Type': 'application/json',
+		'Accepts': 'application/json',
+	},
 });
